@@ -11,17 +11,17 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 interface NotesClientProps {
-  tags: string;
+  tag: string;
 }
 
-const NoteClient = ({ tags }: NotesClientProps) => {
+const NoteClient = ({ tag }: NotesClientProps) => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { data, isSuccess, isPending } = useQuery({
-    queryKey: ["notes", page, search, tags],
-    queryFn: () => fetchNotes(page, search, tags),
+    queryKey: ["notes", page, search, tag],
+    queryFn: () => fetchNotes(page, search, tag),
     placeholderData: keepPreviousData,
     refetchOnMount: false,
   });
@@ -53,11 +53,13 @@ const NoteClient = ({ tags }: NotesClientProps) => {
           Create note +
         </button>
       </header>
-      {isPending && <div>Loading...</div>}
-      {isSuccess && data && data.notes?.length > 0 && (
-        <NoteList notes={data.notes} />
-      )}
+      {isPending && !data && <div>Loading...</div>}
 
+      {isSuccess && data?.notes.length > 0 ? (
+        <NoteList notes={data.notes} />
+      ) : (
+        isSuccess && <div>No notes found</div>
+      )}
       {isModalOpen && (
         <Modal closeModal={closeModal}>
           <NoteForm onClose={closeModal} />
