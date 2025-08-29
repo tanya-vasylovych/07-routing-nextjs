@@ -1,6 +1,6 @@
-import css from './Modal.module.css';
-import { useEffect } from 'react';
-import { createPortal } from 'react-dom';
+import css from "./Modal.module.css";
+import { useEffect } from "react";
+import { createPortal } from "react-dom";
 
 interface ModalProps {
   children: React.ReactNode;
@@ -8,21 +8,21 @@ interface ModalProps {
 }
 
 const Modal = ({ children, closeModal }: ModalProps) => {
-  const el = document.createElement('div');
+  const el = document.createElement("div");
 
   useEffect(() => {
     document.body.appendChild(el);
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
 
     const onEsc = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') closeModal();
+      if (e.key === "Escape") closeModal();
     };
-    document.addEventListener('keydown', onEsc);
+    document.addEventListener("keydown", onEsc);
 
     return () => {
       document.body.removeChild(el);
-      document.body.style.overflow = '';
-      document.removeEventListener('keydown', onEsc);
+      document.body.style.overflow = "";
+      document.removeEventListener("keydown", onEsc);
     };
   }, [el, closeModal]);
 
