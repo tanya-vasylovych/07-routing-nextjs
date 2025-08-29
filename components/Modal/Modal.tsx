@@ -1,7 +1,7 @@
 import css from "./Modal.module.css";
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
-
+import { useRouter } from "next/navigation";
 interface ModalProps {
   children: React.ReactNode;
   closeModal: () => void;
@@ -9,6 +9,8 @@ interface ModalProps {
 
 const Modal = ({ children, closeModal }: ModalProps) => {
   const el = document.createElement("div");
+  const router = useRouter();
+  const close = () => router.back();
 
   useEffect(() => {
     document.body.appendChild(el);
@@ -39,7 +41,10 @@ const Modal = ({ children, closeModal }: ModalProps) => {
       aria-modal="true"
       onClick={handleBackdropClick}
     >
-      <div className={css.modal}>{children}</div>
+      <div className={css.modal}>
+        {children}
+        <button onClick={close}>Close</button>
+      </div>
     </div>,
     el
   );
